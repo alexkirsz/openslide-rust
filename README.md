@@ -66,18 +66,15 @@ own.
 ```rust
 //! Example using the raw binding api
 
-extern crate failure;
-extern crate openslide;
-
 use failure::Error;
 use openslide::bindings;
 
 fn main() -> Result<(), Error> {
     let filename = "assets/CMU-1-Small-Region.svs";
     let osr = bindings::open(filename)?;
-    let num_levels = bindings::get_level_count(osr)?;
+    let num_levels = unsafe { bindings::get_level_count(osr)? };
     println!("Slide has {} levels", num_levels);
-    bindings::close(osr);
+    unsafe { bindings::close(osr); }
 
     Ok(())
 }
@@ -95,9 +92,6 @@ explicitly close an open slide, as the `OpenSlide` struct implements the `Drop` 
 
 ```rust
 //! Example using the convenience binding api
-
-extern crate failure;
-extern crate openslide;
 
 use std::path::Path;
 use failure::Error;

@@ -86,7 +86,7 @@ impl Aperio {
             }
             "aperio.SessonMode" => self.sesson_mode = Some(String::from(value)),
             //_ => println!("Could not parse property name {} and value {}", name, value),
-            _ => {},
+            _ => {}
         }
     }
 

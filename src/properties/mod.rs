@@ -59,7 +59,7 @@ impl Properties {
                 Some("tiff") => tiff_properties.parse_property_name(key, value),
                 Some("aperio") => aperio_properties.parse_property_name(key, value),
                 //_ => println!("Could not parse {}", key),
-                _ => {},
+                _ => {}
             }
         }
 

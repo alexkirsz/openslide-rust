@@ -26,39 +26,36 @@ extern "C" {
 
     fn openslide_close(osr: *const OpenSlideT) -> libc::c_void;
 
-    fn openslide_get_level_count(osr: *const OpenSlideT) -> libc::int32_t;
+    fn openslide_get_level_count(osr: *const OpenSlideT) -> i32;
 
     fn openslide_get_level0_dimensions(
         osr: *const OpenSlideT,
-        w: *mut libc::int64_t,
-        h: *mut libc::int64_t,
+        w: *mut i64,
+        h: *mut i64,
     ) -> libc::c_void;
 
     fn openslide_get_level_dimensions(
         osr: *const OpenSlideT,
-        level: libc::int32_t,
-        w: *mut libc::int64_t,
-        h: *mut libc::int64_t,
+        level: i32,
+        w: *mut i64,
+        h: *mut i64,
     ) -> libc::c_void;
 
-    fn openslide_get_level_downsample(
-        osr: *const OpenSlideT,
-        level: libc::int32_t,
-    ) -> libc::c_double;
+    fn openslide_get_level_downsample(osr: *const OpenSlideT, level: i32) -> libc::c_double;
 
     fn openslide_get_best_level_for_downsample(
         slide: *const OpenSlideT,
         downsample_factor: libc::c_double,
-    ) -> libc::int32_t;
+    ) -> i32;
 
     fn openslide_read_region(
         osr: *const OpenSlideT,
-        dest: *mut libc::uint32_t,
-        x: libc::int64_t,
-        y: libc::int64_t,
-        level: libc::int32_t,
-        w: libc::int64_t,
-        h: libc::int64_t,
+        dest: *mut u32,
+        x: i64,
+        y: i64,
+        level: i32,
+        w: i64,
+        h: i64,
     ) -> libc::c_void;
 
     // ---------------
@@ -115,16 +112,19 @@ pub unsafe fn get_level_count(osr: *const OpenSlideT) -> Result<i32, Error> {
 
 /// Get the dimensions of level 0 (the largest level).
 pub unsafe fn get_level0_dimensions(osr: *const OpenSlideT) -> Result<(i64, i64), Error> {
-    let mut width: libc::int64_t = 0;
-    let mut height: libc::int64_t = 0;
+    let mut width: i64 = 0;
+    let mut height: i64 = 0;
     openslide_get_level0_dimensions(osr, &mut width, &mut height); // This is unsafe
     Ok((width, height))
 }
 
 /// Get the dimensions of a level.
-pub unsafe fn get_level_dimensions(osr: *const OpenSlideT, level: i32) -> Result<(i64, i64), Error> {
-    let mut width: libc::int64_t = 0;
-    let mut height: libc::int64_t = 0;
+pub unsafe fn get_level_dimensions(
+    osr: *const OpenSlideT,
+    level: i32,
+) -> Result<(i64, i64), Error> {
+    let mut width: i64 = 0;
+    let mut height: i64 = 0;
     openslide_get_level_dimensions(osr, level, &mut width, &mut height); // This is unsafe
     Ok((width, height))
 }
@@ -153,7 +153,7 @@ pub unsafe fn read_region(
     w: i64,
     h: i64,
 ) -> Result<Vec<u32>, Error> {
-    let mut buffer: Vec<libc::uint32_t> = Vec::with_capacity((h * w) as usize);
+    let mut buffer: Vec<u32> = Vec::with_capacity((h * w) as usize);
     let p_buffer = buffer.as_mut_ptr();
     openslide_read_region(osr, p_buffer, x, y, level, w, h); // This is unsafe
     buffer.set_len((h * w) as usize);

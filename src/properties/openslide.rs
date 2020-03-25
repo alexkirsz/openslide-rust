@@ -175,7 +175,7 @@ impl OpenSlide {
                                 //    "Could not parse property with name {} and value {}",
                                 //    name, value
                                 //),
-                                _ => {},
+                                _ => {}
                             }
                         }
                         None => println!("hello"),
